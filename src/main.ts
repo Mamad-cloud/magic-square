@@ -110,6 +110,12 @@ function goRight(y: number, limit: number) {
   return y
 }
 
+function goDown(x: number, limit: number ) {
+  x += 1 
+  if ( x > limit) x = 0
+  return x
+}
+
 function isFilled(squares: HTMLElement[][]): boolean {
   for (let i = 0; i < squares.length; i++) {
     for (let j = 0; j < squares.length; j++) {
@@ -121,28 +127,49 @@ function isFilled(squares: HTMLElement[][]): boolean {
   return true
 }
 
+function solveSquaresStep(squares: HTMLElement[][], x: number, y: number, c: number) {
+  let newX = x
+  let newY = y
+
+  let oldX = newX
+  let oldY = newY
+
+  if (squares[newX][newY].innerText === '0') {
+    squares[newX][newY].innerText = c.toString()
+    oldX = newX
+    oldY = newY
+    c++
+  } else {
+    newX = goUp(oldX, squares.length - 1)
+    newY = goRight(oldY, squares.length - 1)
+
+    if ( squares[newX][newY].innerText !== '0') {
+      newX = goDown(oldX, squares.length - 1)
+      newY = oldY
+    }
+  }
+
+  return { newX, newY, c}
+}
 
 function solveSquares(squares: HTMLElement[][]) {
 
   let c = 1
 
-  let x = 0
-  let y = Math.floor(squares.length / 2)
+  let newX = 0
+  let newY = Math.floor(squares.length / 2)
 
+  let oldX = newX
+  let oldY = newY
 
-  for ( let i = 0; i < 1000; i++) {
-    if (squares[x][y].innerText === '0') {
-      squares[x][y].innerText = c.toString()
-      c++
-    } else {
-      x = goUp(x, squares.length - 1)
-      y = goRight(y, squares.length - 1)
-    }
+  while( !isFilled(squares) ) {
+    oldX = newX
+    oldY = newY
+    const ret = solveSquaresStep(squares, oldX, oldY, c)
+    newX = ret.newX
+    newY = ret.newY
+    c = ret.c
   }
-
- 
-
-
 }
 
 
@@ -151,6 +178,7 @@ function main() {
   const rootElem = <HTMLDivElement>document.getElementById('app-container')!
   let squareContainer: HTMLDivElement | null = null
   let squares: HTMLElement[][] = []
+  let solveBtn: HTMLButtonElement | null = null
 
   let inputVal = 3
   const inputElem = <HTMLFormElement>createInputFormElem(false, (ev: Event) => {
@@ -169,14 +197,18 @@ function main() {
     squares = []
     initializeSquares(inputVal, squares, squareContainer)
 
-    const solveBtn = createElemWithClasses('button', undefined, '')
-    solveBtn.innerText = 'solve'
-    solveBtn.addEventListener('click', (_e) => {
-      solveSquares(squares)
-    })
-    squareContainer.appendChild(solveBtn)
 
+    if (solveBtn === null) {
+      solveBtn = <HTMLButtonElement>createElemWithClasses('button', undefined, '')
+      solveBtn.innerText = 'solve'
+      solveBtn.addEventListener('click', (_e) => {
+        solveSquares(squares)
+      })
+    }
+    
+    squareContainer.scrollIntoView({ behavior: 'smooth'})
     rootElem.appendChild(squareContainer)
+    rootElem.appendChild(solveBtn)
   })
 
   rootElem.appendChild(inputElem)
