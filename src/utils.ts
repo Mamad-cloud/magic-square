@@ -19,4 +19,20 @@ function createSquareContainer(size: number): HTMLDivElement {
     return container
 }
 
-export { createElemWithClasses, createSquareContainer }
+
+class Vector2 {
+  public x : number 
+  public y: number
+
+  constructor(x: number, y: number) {
+    this.x = x
+    this.y = y
+  }
+
+  set(x: number, y: number) : void {
+    this.x = x
+    this.y = y
+  }
+}
+
+export { createElemWithClasses, createSquareContainer, Vector2 }
