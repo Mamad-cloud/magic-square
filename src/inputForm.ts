@@ -27,7 +27,7 @@ function createInputFormContainer(): HTMLFormElement {
     inputElem.type = 'number'
     inputElem.value = Number(3).toString()
     inputElem.min = '3'
-    inputElem.max = '9'
+    inputElem.max = '11'
     inputElem.step = '2'
   
     const submitBtn = <HTMLButtonElement>createElemWithClasses('input', undefined,

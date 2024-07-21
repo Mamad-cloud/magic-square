@@ -13,7 +13,7 @@ function main() {
   let magicSquare: MagicSquare | null = null
   let inputVal = 3
 
-  const inputElem = <HTMLFormElement>createInputFormElem(false, (ev: Event) => {
+  const inputElem = <HTMLFormElement>createInputFormElem(true, (ev: Event) => {
     // @ts-expect-error
     inputVal = ev.target.value
   }, (ev: SubmitEvent) => {
@@ -59,6 +59,7 @@ function main() {
 
   rootElem.appendChild(inputElem)
   document.body.appendChild(rootElem)
+
 }
 
 main()

@@ -37,9 +37,6 @@ export default class MagicSquare {
     }
 
     solveSquares() {
-        this.c = 1
-        this.pos.set(0, Math.floor(this.size / 2))
-
         while (!this.isFilled()) {
             this.solveSquaresStep()
         }
