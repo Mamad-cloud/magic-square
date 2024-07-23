@@ -98,4 +98,34 @@ function thirdLargest(arr: number[]): number | null {
 
 }
 
-export { createElemWithClasses, createSquareContainer, Vector2, decimalToBinary, thirdLargest }
+
+function thirdLargestSP(arr: number[]): number | null {
+  
+  if ( arr.length < 3 ) {
+    console.log('enter array with atleast 3 elements')
+    return null
+  }
+  
+  let first = arr[0]
+  let second = -Infinity
+  let third = -Infinity
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > first) {
+
+      third = second;
+      second = first;
+      first = arr[i];
+
+    } else if (arr[i] > second) {
+
+      third = second;
+      second = arr[i];
+
+    } else if (arr[i] > third) third = arr[i];
+  }
+
+  return third
+}
+
+export { createElemWithClasses, createSquareContainer, Vector2, decimalToBinary, thirdLargest, thirdLargestSP }

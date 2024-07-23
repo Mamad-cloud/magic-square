@@ -1,4 +1,4 @@
-import { decimalToBinary, thirdLargest, Vector2 } from "./utils"
+import { decimalToBinary, thirdLargest, thirdLargestSP, Vector2 } from "./utils"
 
 export class Stack<T> {
 
@@ -319,3 +319,4 @@ mouse.getOut()
 
 console.log(decimalToBinary(31))
 console.log(thirdLargest([3, 2, 1]))
+console.log(thirdLargestSP([3, 2, 1]))
