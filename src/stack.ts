@@ -1,4 +1,4 @@
-import { Vector2 } from "./utils"
+import { decimalToBinary, thirdLargest, Vector2 } from "./utils"
 
 export class Stack<T> {
 
@@ -308,11 +308,14 @@ const mazeMap = new MazeMap(4, 4,
     1, 0, 0, 0,
 )
 
+
 const maze = new Maze(mazeMap)
-maze.setExit(new Vector2(maze.size.x, maze.size.y+1))
 maze.setStart(new Vector2(0, 1))
+maze.setExit(new Vector2(maze.size.x, maze.size.y+1))
 maze.print()
 
 const mouse = new MouseInMaze(maze)
 mouse.getOut()
 
+console.log(decimalToBinary(31))
+console.log(thirdLargest([3, 2, 1]))

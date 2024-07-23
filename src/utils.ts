@@ -49,4 +49,53 @@ class Vector2 {
   }
 }
 
-export { createElemWithClasses, createSquareContainer, Vector2 }
+function decimalToBinary(N: number) {
+  let binary = '';
+
+  while (N > 0) {
+      binary = (N % 2) + binary;
+      N = Math.floor(N / 2);
+  }
+
+  return binary;
+}
+
+function thirdLargest(arr: number[]): number | null {
+  
+  if ( arr.length < 3 ) {
+    console.log('enter array with atleast 3 elements')
+    return null
+  }
+  
+  let first = -Infinity
+  let second = -Infinity
+  let third = -Infinity
+
+  for( let i = 0; i < arr.length; i++) {
+    if ( arr[i] > first) {
+      let tmp = first
+      first = arr[i]
+      second = tmp
+    }
+  }
+
+  for(let i = 0; i < arr.length; i++) {
+    if( arr[i] > second && arr[i] < first) {
+      let tmp = second
+      second = arr[i]
+      third = tmp
+    }
+  }
+
+  for(let i = 0; i < arr.length; i++) {
+    if( arr[i] > third && arr[i] < second) {
+      third = arr[i]
+    }
+  }
+
+
+  return third
+
+}
+
+export { createElemWithClasses, createSquareContainer, Vector2, decimalToBinary, thirdLargest }
