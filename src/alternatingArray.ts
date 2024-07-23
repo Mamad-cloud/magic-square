@@ -1,29 +1,37 @@
 
+function createAlternatingArray(size: number, start: number = 1) : Array<Int32Array> {
+    let _start = start
+    const arr = new Array<Int32Array>(size)
+    
+    for ( let i = 0; i < size; i++) 
+        arr[i] = new Int32Array(size).fill(0)
 
-function main() {
-    const n = 3 // input this 
+    console.log(arr)
 
-    let c = 1
-    const arr = new Array<Int32Array>(
-        new Int32Array([0, 0, 0]),
-        new Int32Array([0, 0, 0]),
-        new Int32Array([0, 0, 0]),
-    )
-
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < size; i++) {
         if (i % 2 == 1) {
-            for (let j = n - 1; j >= 0; j--) {
-                arr[i][j] = c
-                c++
+            for (let j = size - 1; j >= 0; j--) {
+                arr[i][j] = _start
+                _start++
             }
         } else {
-            for (let j = 0; j < n; j++) {
-                arr[i][j] = c
-                c++
+            for (let j = 0; j < size; j++) {
+                arr[i][j] = _start
+                _start++
             }
         }
     }
 
+    return arr
+}
+
+
+function main() {
+    const n = 5 // input this 
+
+    let c = 3
+    const arr = createAlternatingArray(n, c)
+    
     console.log(arr)
 }
 

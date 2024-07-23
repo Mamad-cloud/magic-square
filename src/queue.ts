@@ -73,11 +73,13 @@ export class CircularQueue<T> {
             const data: T = this.arr[this.front]!
             this.arr[this.front] = null
 
-            if( this.front === this.capacity-1) {
-                this.front = 0
-            } else if (this.front === 0 && this.rear === 0) {
+            if( this.front === this.rear) {
                 this.front = -1
                 this.rear = -1
+
+            } else if ( this.front === this.capacity-1) {
+              
+                this.front = 0
             } else { 
                 this.front++
             }
@@ -88,6 +90,10 @@ export class CircularQueue<T> {
 
     public size(): number {
         return this.capacity
+    }
+
+    public list(): ReadonlyArray<T | null> {
+        return this.arr
     }
 
 }

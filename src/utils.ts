@@ -33,6 +33,20 @@ class Vector2 {
     this.x = x
     this.y = y
   }
+
+  add(x: number, y: number) : void {
+    this.x += x
+    this.y += y
+  }
+
+  copy(other: Vector2) {
+    this.x = other.x
+    this.y = other.y
+  }
+
+  clone(): Vector2 {
+    return new Vector2(this.x, this.y)
+  }
 }
 
 export { createElemWithClasses, createSquareContainer, Vector2 }
