@@ -76,9 +76,7 @@ export class CircularQueue<T> {
             if( this.front === this.rear) {
                 this.front = -1
                 this.rear = -1
-
             } else if ( this.front === this.capacity-1) {
-              
                 this.front = 0
             } else { 
                 this.front++
