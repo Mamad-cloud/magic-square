@@ -4,10 +4,10 @@ interface ScoreItem {
     score: number,
 }
 
-let n = 8
+let n = 16
 let generation = 0
 let population: Array<Int32Array> = []
-const scores: Array<ScoreItem> = []
+let scores: Array<ScoreItem> = []
 const finalSolutions = new Map<number, Int32Array>()
 let converged = false 
 
@@ -103,6 +103,7 @@ function fitness(solution: Int32Array): number {
 
 // TODO: Maybe return the number of scores and check for bounds 
 function populateFitnessScores(): void {
+    scores = []
 
     for( let i = 0; i < population.length; i++) {
         let newScore: ScoreItem = {index: i, score: fitness(population[i])}
@@ -194,11 +195,12 @@ function solveNQueen(maxGenerations: number = 500): void {
         i++
     }
 
-    if ( i !== maxGenerations)
+    if ( i !== maxGenerations) {
         console.log(`Converged on the ${generation}th generation with ${finalSolutions.size} solutions`)
-    else console.log(`could not find solution in ${i} generations`)
+        console.log(finalSolutions)
+    } else console.log(`could not find solution in ${i} generations`)
 }
 
 
-initGeneration0(100)
+initGeneration0(1000)
 time(solveNQueen, 1000)
