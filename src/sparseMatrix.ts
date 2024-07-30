@@ -15,7 +15,7 @@ class HashTable {
     }
 
     public hash(n1: number, n2: number): number {
-        return n1 ^ 9897172938 + n2 ^ 3244362342 
+        return Math.abs(n1 ^ 9897172938 * n2 ^ 3244362342) 
     }
 
     public insert(n1: number, n2: number, val: number) {
@@ -86,6 +86,6 @@ class Sparse {
 
 
 const ht = new HashTable(100)
-console.log(ht.hash(1, 2) % ht.capacity)
+console.log(ht.hash(5, 5) % ht.capacity)
 
 
