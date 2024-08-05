@@ -37,6 +37,8 @@ class HashTable {
 
 }
 
+// TODO: add multiplication and transpose 
+
 /**
  * trivial implementation for a sparse matrix 
  * uses 2D array to store the matrix none zero vals 
