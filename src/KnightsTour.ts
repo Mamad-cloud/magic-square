@@ -10,7 +10,7 @@ interface BoradNode {
 
 let board: BoradNode[][] = []
 let knightPos: Vector2 | null = null
-let path: BoradNode[] = []
+let path: Vector2[] = []
 
 // initialize board 
 for( let i = 0; i < n; i++) {
@@ -20,24 +20,53 @@ for( let i = 0; i < n; i++) {
     }
 }
 
-// set knight in the middle of the board
-knightPos = new Vector2(Math.floor(n / 2), Math.floor(m / 2))
-board[knightPos.x][knightPos.y].visited = true
+// try all positions and pick best 
+let bestPos = new Vector2(0, 0)
+let bestScore = 0
+for( let i = 0; i < n; i++) {
+    for( let j = 0; j < m; j++) {
+        // sets all board positions to unvisited 
+        resetBoard()
+        
+        knightPos = new Vector2(i, j)
+        board[knightPos.x][knightPos.y].visited = true
+        
+        // this will populate path with the current pos as the start 
+        solve()
 
-solve()
+        if( path.length > bestScore) {
+            bestScore = path.length
+            bestPos.copy(knightPos)
+        }
+    }
+}
+
+console.log(bestPos)
+console.log(bestScore)
+
+
+
 
 
 function solve(): void {
+    path = []
+    // step adds locations to the global path
     while( step(knightPos, board) ) { }
-    console.log(path)
 }
 
+/**
+ * WARNING: this function directly manipulates global vars
+ * @param _knightPos 
+ * @param _board 
+ * @returns 
+ */
 function step(_knightPos: Vector2, _board: BoradNode[][]): boolean {
     let nextMove = getNextBestMove(_knightPos, _board)
     if ( nextMove ) {
+        // this is not good 
         knightPos = move(_knightPos, nextMove)
         board[knightPos.x][knightPos.y].visited = true
-        path.push(board[knightPos.x][knightPos.y])
+        path.push(board[knightPos.x][knightPos.y].pos)
         return true 
     }
     return false 
@@ -129,4 +158,12 @@ function move(pos: Vector2, dir: number): Vector2 {
 
     return newPos
 }
+
+function resetBoard(): void {
+    for( let i = 0; i < board.length; i++) {
+        for( let j = 0; j < board[i].length; j++) {
+            board[i][j].visited = false 
+        }
+    }
+} 
 
