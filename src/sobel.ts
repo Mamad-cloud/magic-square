@@ -59,53 +59,66 @@ imageElem.onload = ( _ev ) => {
     }
 
     // convulve image with sobel operators 
-    for( let i = 0; i <= newImg.height - 2; i++) {
-        for( let j = 0; j <= (newImg.width - 3) * 4; j+=4) {
-
-            let a0 = newImg.data[i * (newImg.width * 4) + j + 2]
-            let a1 = newImg.data[i * (newImg.width * 4) + j + 2 + 4]
-            let a2 = newImg.data[i * (newImg.width * 4) + j + 2 + 8]
-
-            let b0 = newImg.data[(i + 1) * (newImg.width * 4) + j + 2]
-            let b1 = newImg.data[(i + 1) * (newImg.width * 4) + j + 2 + 4]
-            let b2 = newImg.data[(i + 1) * (newImg.width * 4) + j + 2 + 8]
-
-            let c0 = newImg.data[(i + 2) * (newImg.width * 4) + j + 2]
-            let c1 = newImg.data[(i + 2) * (newImg.width * 4) + j + 2 + 4]
-            let c2 = newImg.data[(i + 2) * (newImg.width * 4) + j + 2 + 8]
-
-            let mat = [
-                [a0, a1, a2],
-                [b0, b1, b2],
-                [c0, c1, c2],
-            ]
-
+    for( let i = 0; i <= newImg.height; i++) {
+        for( let j = 0; j <= (newImg.width - 1) * 4; j+=4) {
 
             let Gx = 0
-            for( let i = 0; i < 3; i++) {
-                for( let j = 0; j < 3; j++) {
-                    Gx += mat[i][j] * Sx[2 - i][2 - j]
+            let Gy = 0
+
+            for( let di = 0; di < 3; di++) {
+                for ( let dj = 0; dj<=8; dj+=4) {
+                    const pixel = newImg.data[(i + di) * (newImg.width * 4) + (dj + j)]
+
+
+                    Gx += Sx[di][dj / 4] * pixel
+                    Gy += Sy[di][dj / 4] * pixel
                 }
             }
+            /**
+            // let a0 = newImg.data[i * (newImg.width * 4) + j]
+            // let a1 = newImg.data[i * (newImg.width * 4) + j + 4]
+            // let a2 = newImg.data[i * (newImg.width * 4) + j + 8]
+
+            // let b0 = newImg.data[(i + 1) * (newImg.width * 4) + j]
+            // let b1 = newImg.data[(i + 1) * (newImg.width * 4) + j + 4]
+            // let b2 = newImg.data[(i + 1) * (newImg.width * 4) + j + 8]
+
+            // let c0 = newImg.data[(i + 2) * (newImg.width * 4) + j]
+            // let c1 = newImg.data[(i + 2) * (newImg.width * 4) + j + 4]
+            // let c2 = newImg.data[(i + 2) * (newImg.width * 4) + j + 8]
+
+            // let mat = [
+            //     [a0, a1, a2],
+            //     [b0, b1, b2],
+            //     [c0, c1, c2],
+            // ]
+
+
+            // let Gx = 0
+            // for( let di = 0; di < 3; di++) {
+            //     for( let dj = 0; dj < 3; dj++) {
+            //         Gx += mat[di][dj] * Sx[di][dj]
+            //     }
+            // }
 
             
-            let Gy = 0
-            for( let i = 0; i < 3; i++) {
-                for( let j = 0; j < 3; j++) {
-                    Gy += mat[i][j] * Sy[2-i][2-j]
-                }
-            }
+            // let Gy = 0
+            // for( let di = 0; di < 3; di++) {
+            //     for( let dj = 0; dj < 3; dj++) {
+            //         Gy += mat[di][dj] * Sy[di][dj]
+            //     }
+            // } */
 
-            let G = Math.sqrt(Gx * Gx + Gy * Gy) 
+            let G = Math.sqrt(Gx * Gx + Gy * Gy) | 0 
 
 
-            newImg.data[(i + 1) * (newImg.width * 4) + j + 2 + 4] = G
-            newImg.data[(i + 1) * (newImg.width * 4) + j + 2 + 3] = G
-            newImg.data[(i + 1) * (newImg.width * 4) + j + 2 + 2] = G
+            newImg.data[(i) * (newImg.width * 4) + j] = G
+            newImg.data[(i) * (newImg.width * 4) + j + 1] = G
+            newImg.data[(i) * (newImg.width * 4) + j + 2] = G
+            newImg.data[(i) * (newImg.width * 4) + j + 3] = 255
 
         }
     }
-    
 
     ctx2.putImageData(newImg, 0, 0)
 
