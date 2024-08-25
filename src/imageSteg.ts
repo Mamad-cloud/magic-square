@@ -22,7 +22,7 @@ imageElem.onload = (_ev) => {
     let key = 'thisismykey2343'
 
     imageData = embedData(msg, imageData)
-    let hidden = extractData(msg.length * 8 - 1, imageData)
+    let hidden = extractData(msg.length* 8, imageData)
 
     ctx2.putImageData(imageData, 0, 0)
     console.log(binStrToText(hidden))
@@ -46,21 +46,28 @@ function extractData(msgLen: number, img: ImageData): string {
 
     for( let i = 0; i < msgLen; i++) {
 
+        
+
         let channel = img.data[channelIdx].toString(2).padStart(8, '0')
         
-        if ( channel[6] === '1' && channel[7] === '1') {
-            msgBin += '0'
-        } else {
-            msgBin += '1'
-        }
-
         if( channelCtr === 2) {
-            channelIdx+=2
+            channelIdx += 2
             channelCtr = 0
         } else {
             channelIdx++
             channelCtr++
         }
+        
+        // the 8th bit is the XOR result between the message bit and the 7th bit of the rgb image component 
+        // therefore the message bit would be the second operand of the XOR operation which resulted in the 8th bit 
+        // 7th XOR ? = 8th 
+        if ( (channel[6] === '1' && channel[7] === '1') || (channel[6] === '0' && channel[7] === '0')) {
+            msgBin += '0'
+        } else  {
+            msgBin += '1'
+        }
+
+        
     }
     
     return msgBin
@@ -113,65 +120,3 @@ function embedData(msg: string, img: ImageData): ImageData {
     return img 
 }
 
-
-function main() {
-    let message = '123'
-    let img = new Uint8Array(4 * 20).fill(255)
-
-    // bytes array 
-    let msgBin: number[] = []
-    for( let i = 0; i < message.length; i++) {
-        msgBin.push(message.charCodeAt(i))
-    }
-
-    let channelIdx = 0
-    let channelCtr = 0
-
-    for( let i = 0; i < msgBin.length; i++) {
-        let toProc = msgBin[i]
-        // extract 8 bits of the msg byte 
-        let msgBitCarrier = ''
-        for( let j = 0; j < 8; j++) {
-            msgBitCarrier = toProc.toString(2).padStart(8, '0')
-            msgBitCarrier = msgBitCarrier[j] // go from MSB to LSB
-
-            let channel = img[channelIdx].toString(2).padStart(8, '0')
-            let ch7thBit = parseInt(channel[6], 2)
-            
-            // XOR 7th bit of the image rgb component with the messsage bit 
-            let xorRes = ch7thBit ^ parseInt(msgBitCarrier, 2)
-            
-            // place result in 8th bit of the pixel channel
-            let binRepr: string | string[] = img[channelIdx].toString(2).padStart(8, '0')
-            binRepr = binRepr.split('')
-            binRepr.pop()
-            binRepr.push(xorRes.toString(2))
-            binRepr = binRepr.join('')
-            
-            img[channelIdx] = parseInt(binRepr, 2)
-            
-            if ( channelCtr === 2) {
-                channelIdx += 2
-                channelCtr = 0
-                
-            } else {
-                channelIdx++
-                channelCtr++
-            }  
-        }
-    }
-
-
-    let msgBinRepr = ''
-    for( let char of message) {
-        msgBinRepr += char.charCodeAt(0).toString(2).padStart(8, '0')
-    }
-    console.log('Message Bin Representation :')
-    console.log(msgBinRepr)
-    console.log('---------------------------------------')
-
-    for( let channel of img) {
-        console.log(channel.toString(2).padStart(8, '0'))
-    }
-
-}
